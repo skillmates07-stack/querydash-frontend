@@ -1,0 +1,84 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px; /* For fixed header */
+}
+
+/* Accessibility: Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom scrollbar for modern look */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6366f1;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4f46e5;
+}
+
+/* Selection color */
+::selection {
+  background-color: #6366f1;
+  color: white;
+}
+
+/* Responsive typography */
+@layer components {
+  .text-hero {
+    @apply text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight;
+  }
+
+  .text-section {
+    @apply text-2xl md:text-3xl lg:text-4xl font-semibold;
+  }
+
+  .text-body {
+    @apply text-base md:text-lg leading-relaxed;
+  }
+
+  /* Cards with consistent styling */
+  .card {
+    @apply bg-secondary rounded-lg p-6 border border-neutral/20 shadow-lg hover:shadow-xl transition-shadow duration-300;
+  }
+
+  .card-hover {
+    @apply hover:border-accent/50 hover:bg-secondary/80;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply px-6 py-3 bg-accent text-white rounded-lg font-semibold hover:bg-accent/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 bg-secondary border border-neutral/30 text-white rounded-lg font-semibold hover:border-accent hover:text-accent transition-colors;
+  }
+
+  /* Container with responsive padding */
+  .container-safe {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
