@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { RiPencilLine } from 'react-icons/ri'; // For builder icon
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -31,7 +32,8 @@ const navigation = [
   { name: 'Queries', href: '/dashboard/queries', icon: RiSearchLine },
   { name: 'Alerts', href: '/dashboard/alerts', icon: RiBellLine },
   { name: 'User Tracking', href: '/dashboard/tracking', icon: RiUserLocationLine },
-  { name: 'Settings', href: '/dashboard/settings', icon: RiSettings4Line }
+  { name: 'Settings', href: '/dashboard/settings', icon: RiSettings4Line },
+  { name: 'Builder', href: '/dashboard/builder', icon: RiPencilLine }
 ];
 
   return (
@@ -135,6 +137,7 @@ const navigation = [
     </div>
   );
 }
+
 
 
 
