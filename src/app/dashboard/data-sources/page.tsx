@@ -338,11 +338,20 @@ export default function DataSourcesPage() {
                   {previewData.rows.toLocaleString()} rows • {previewData.columns.length} columns
                 </p>
               </div>
-              <button
-                onClick={() => setPreviewData(null)}
-                className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-all"
+              <button 
+                onClick={() => {
+                localStorage.setItem('activeDataSource', JSON.stringify({
+                id: previewData.name,
+                name: previewData.name,
+                rows: previewData.rows,
+                columns: previewData.columns,
+                data: previewData.preview
+                }));
+              window.location.href = '/dashboard/builder';
+              }}
+              className="px-6 py-2 rounded-lg bg-accent text-white hover:bg-accent/90 transition-all shadow-lg shadow-accent/20"
               >
-                <RiCloseLine className="text-2xl text-white" />
+              Use This Data
               </button>
             </div>
 
