@@ -14,17 +14,13 @@ import {
   RiCloseLine,
   RiLogoutBoxLine
 } from 'react-icons/ri';
+import { VisualizationProvider } from '@/contexts/VisualizationContext';
 
 const navigation = [
-  // Business Intelligence Section
   { name: 'Overview', href: '/dashboard', icon: RiDashboardLine, section: 'BI' },
   { name: 'Visualizations', href: '/dashboard/visualizations', icon: RiLineChartLine, section: 'BI' },
   { name: 'Data Sources', href: '/dashboard/data-sources', icon: RiFolderOpenLine, section: 'BI' },
-  
-  // Website Monitoring Section
   { name: 'Live Tracking', href: '/dashboard/tracking', icon: RiEyeLine, section: 'Monitor' },
-  
-  // Shared Section
   { name: 'Alerts', href: '/dashboard/alerts', icon: RiNotification3Line, section: 'Shared' },
   { name: 'Settings', href: '/dashboard/settings', icon: RiSettings4Line, section: 'Shared' }
 ];
@@ -65,7 +61,6 @@ export default function DashboardLayout({
 
           {/* Navigation */}
           <nav className="flex-1 px-3 py-4 overflow-y-auto">
-            {/* Business Intelligence Section */}
             <div className="mb-6">
               <p className="px-3 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                 Business Intelligence
@@ -93,7 +88,6 @@ export default function DashboardLayout({
               </div>
             </div>
 
-            {/* Website Monitoring Section */}
             <div className="mb-6">
               <p className="px-3 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                 Website Monitoring
@@ -121,7 +115,6 @@ export default function DashboardLayout({
               </div>
             </div>
 
-            {/* Shared Section */}
             <div className="mb-6">
               <p className="px-3 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                 General
@@ -166,7 +159,7 @@ export default function DashboardLayout({
         </div>
       </div>
 
-      {/* Mobile sidebar overlay */}
+      {/* Mobile overlay */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
@@ -190,12 +183,14 @@ export default function DashboardLayout({
             </div>
             <h1 className="text-lg font-bold text-white">QueryDash</h1>
           </div>
-          <div className="w-10" /> {/* Spacer for centering */}
+          <div className="w-10" />
         </div>
 
-        {/* Page Content */}
+        {/* Page Content with Context */}
         <main className="flex-1 overflow-auto">
-          {children}
+          <VisualizationProvider>
+            {children}
+          </VisualizationProvider>
         </main>
       </div>
     </div>
