@@ -10,11 +10,15 @@ import ConfigurationPanel from '@/components/visualizations/ConfigurationPanel';
 import { LayoutGrid, Save } from 'lucide-react';
 
 // Utility to generate unique options for categorical filters
-function getCategoryOptions(dataSource) {
+interface DataSource {
+  columns: string[];
+  data: Record<string, any>[];
+}
+
+function getCategoryOptions(dataSource?: DataSource) {
   if (!dataSource) return {};
-  const options = {};
-  dataSource.columns.forEach(col => {
-    // String or categorical heuristic: < 30 unique values
+  const options: Record<string, string[]> = {};
+  dataSource.columns.forEach((col) => {
     const uniques = new Set(dataSource.data.slice(0, 200).map(row => String(row[col])));
     if (uniques.size > 1 && uniques.size < 30) {
       options[col] = Array.from(uniques);
@@ -22,6 +26,7 @@ function getCategoryOptions(dataSource) {
   });
   return options;
 }
+
 
 // Data filtering logic
 function applyFilters(data, filters, columns) {
