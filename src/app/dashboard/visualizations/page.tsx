@@ -29,30 +29,43 @@ function getCategoryOptions(dataSource?: DataSource) {
 
 
 // Data filtering logic
-function applyFilters(data, filters, columns) {
+type Row = Record<string, any>;
+
+interface Filters {
+  search?: string;
+  dateRange: { start: Date | null; end: Date | null };
+  categories: Record<string, string[]>;
+}
+
+function applyFilters(data: Row[], filters: Filters, columns: string[]): Row[] {
   let filtered = [...data];
+
   if (filters.search?.trim()) {
     const search = filters.search.trim().toLowerCase();
     filtered = filtered.filter(row =>
       columns.some(col => String(row[col] || '').toLowerCase().includes(search))
     );
   }
+
   if (filters.dateRange.start || filters.dateRange.end) {
     filtered = filtered.filter(row => {
-      // Replace 'Sale_Date' with your date column; customize per your CSV
+      // Replace 'Sale_Date' with your actual date column name
       const dt = new Date(row['Sale_Date']);
       if (filters.dateRange.start && dt < filters.dateRange.start) return false;
       if (filters.dateRange.end && dt > filters.dateRange.end) return false;
       return true;
     });
   }
+
   for (const [field, sels] of Object.entries(filters.categories)) {
     if (sels && sels.length > 0) {
       filtered = filtered.filter(row => sels.includes(String(row[field])));
     }
   }
+
   return filtered;
 }
+
 
 export default function VisualizationsPage() {
   const { activeDataSource, visualizations } = useVisualization();
