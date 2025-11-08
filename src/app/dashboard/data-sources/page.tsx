@@ -28,26 +28,27 @@ interface DataSource {
   size: string;
 }
 
-export default function DataSourcesPage() {
-  const [dataSources, setDataSources] = useState<DataSource[]>(
-      id: '1',
-      name: 'Sales Data 2024.xlsx',
-      type: 'excel',
-      status: 'active',
-      rows: 12500,
-      lastSync: '2 min ago',
-      size: '2.3 MB'
-    },
-    {
-      id: '2',
-      name: 'Customer Database',
-      type: 'database',
-      status: 'active',
-      rows: 45000,
-      lastSync: '1 min ago',
-      size: '8.7 MB'
-    }
-  ]);
+const [dataSources, setDataSources] = useState<DataSource[]>([
+  {
+    id: '1',
+    name: 'Sales Data 2024.xlsx',
+    type: 'excel',
+    status: 'active',
+    rows: 12500,
+    lastSync: '2 min ago',
+    size: '2.3 MB'
+  },
+  {
+    id: '2',
+    name: 'Customer Database',
+    type: 'database',
+    status: 'active',
+    rows: 45000,
+    lastSync: '1 min ago',
+    size: '8.7 MB'
+  }
+]);
+
 
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
