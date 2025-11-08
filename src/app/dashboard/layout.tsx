@@ -34,7 +34,6 @@ const navigation = [
   { name: 'Settings', href: '/dashboard/settings', icon: RiSettings4Line }
 ];
 
-];
   return (
     <div className="min-h-screen bg-[#0a0f1e]">
       {/* Mobile sidebar backdrop */}
@@ -136,6 +135,7 @@ const navigation = [
     </div>
   );
 }
+
 
 
 
