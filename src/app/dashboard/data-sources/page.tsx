@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useRef } from 'react';
 import {
   RiCheckboxCircleLine,
   RiAddLine,
@@ -8,7 +9,7 @@ import {
   RiLockLine,
   RiUploadCloudLine,
   RiFileExcelLine,
-  RiFileLine,        // ← CHANGED from RiFileCsvLine
+  RiFileLine,
   RiGoogleLine,
   RiDatabase2Line,
   RiLinkM,
@@ -28,8 +29,7 @@ interface DataSource {
 }
 
 export default function DataSourcesPage() {
-  const [dataSources, setDataSources] = useState<DataSource[]>([
-    {
+  const [dataSources, setDataSources] = useState<DataSource[]>(
       id: '1',
       name: 'Sales Data 2024.xlsx',
       type: 'excel',
