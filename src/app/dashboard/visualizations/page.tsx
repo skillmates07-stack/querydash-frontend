@@ -9,13 +9,16 @@ import VisualizationCard from '@/components/visualizations/VisualizationCard';
 import ConfigurationPanel from '@/components/visualizations/ConfigurationPanel';
 import { LayoutGrid, Save } from 'lucide-react';
 
-// Utility to generate unique options for categorical filters
+// DataSource interface that reflects your current data structure
 interface DataSource {
   columns: string[];
   data: Record<string, any>[];
+  rows?: number;
+  name?: string;
 }
 
-function getCategoryOptions(dataSource?: DataSource) {
+// Accept both undefined and null explicitly
+function getCategoryOptions(dataSource?: DataSource | null) {
   if (!dataSource) return {};
   const options: Record<string, string[]> = {};
   dataSource.columns.forEach((col) => {
@@ -27,8 +30,6 @@ function getCategoryOptions(dataSource?: DataSource) {
   return options;
 }
 
-
-// Data filtering logic
 type Row = Record<string, any>;
 
 interface Filters {
@@ -49,7 +50,7 @@ function applyFilters(data: Row[], filters: Filters, columns: string[]): Row[] {
 
   if (filters.dateRange.start || filters.dateRange.end) {
     filtered = filtered.filter(row => {
-      // Replace 'Sale_Date' with your actual date column name
+      // Replace 'Sale_Date' with your actual date column if different
       const dt = new Date(row['Sale_Date']);
       if (filters.dateRange.start && dt < filters.dateRange.start) return false;
       if (filters.dateRange.end && dt > filters.dateRange.end) return false;
@@ -66,11 +67,11 @@ function applyFilters(data: Row[], filters: Filters, columns: string[]): Row[] {
   return filtered;
 }
 
-
 export default function VisualizationsPage() {
   const { activeDataSource, visualizations } = useVisualization();
   const { filters } = useFiltering();
-  const categoryOptions = getCategoryOptions(activeDataSource);
+
+  const categoryOptions = getCategoryOptions(activeDataSource ?? undefined);
 
   const filteredData = activeDataSource
     ? applyFilters(activeDataSource.data, filters, activeDataSource.columns)
