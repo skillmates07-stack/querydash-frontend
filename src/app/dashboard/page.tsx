@@ -9,8 +9,8 @@ import {
   RiFlashlightLine,
   RiArrowUpLine,
   RiCheckboxCircleLine,
-  RiErrorWarningLine
-  RiLineChartLine
+  RiErrorWarningLine,
+  RiLineChartLine,
 } from 'react-icons/ri';
 
 interface MetricsData {
@@ -276,4 +276,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
 
