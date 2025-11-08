@@ -1,19 +1,22 @@
 'use client';
 
-import { useState, useRef } from 'react';
 import {
+  RiCheckboxCircleLine,
+  RiAddLine,
+  RiSettings4Line,
+  RiDeleteBin6Line,
+  RiLockLine,
   RiUploadCloudLine,
   RiFileExcelLine,
-  RiFileCsvLine,
+  RiFileLine,        // ← CHANGED from RiFileCsvLine
   RiGoogleLine,
   RiDatabase2Line,
   RiLinkM,
-  RiCheckboxCircleLine,
-  RiErrorWarningLine,
-  RiDeleteBin6Line,
+  RiRefreshLine,
   RiDownloadLine,
-  RiRefreshLine
+  RiErrorWarningLine
 } from 'react-icons/ri';
+om 'react-icons/ri';
 
 interface DataSource {
   id: string;
@@ -120,7 +123,7 @@ export default function DataSourcesPage() {
                 <span>Excel (.xlsx)</span>
               </div>
               <div className="flex items-center gap-1">
-                <RiFileCsvLine className="text-blue-500" />
+                <RiFileLine className="text-blue-500" />
                 <span>CSV (.csv)</span>
               </div>
             </div>
@@ -177,7 +180,7 @@ export default function DataSourcesPage() {
             const Icon = source.type === 'excel' 
               ? RiFileExcelLine 
               : source.type === 'csv' 
-              ? RiFileCsvLine 
+              ? RiFileLine 
               : source.type === 'sheets'
               ? RiGoogleLine
               : RiDatabase2Line;
