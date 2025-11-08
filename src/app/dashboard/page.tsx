@@ -91,7 +91,6 @@ export default function DashboardPage() {
       });
     }
 
-    // Real-time simulation
     const interval = setInterval(() => {
       setMetrics((prev) =>
         prev.map((metric) => {
@@ -115,10 +114,10 @@ export default function DashboardPage() {
     <div className="space-y-8">
       {/* Page header */}
       <div>
-        <h1 className="text-3xl font-bold mb-2" style={{ color: '#ffffff' }}>
+        <h1 className="text-3xl font-bold text-white mb-2">
           Dashboard Overview
         </h1>
-        <p style={{ color: '#a8a8a8' }}>Real-time analytics and insights</p>
+        <p className="text-gray-400">Real-time analytics and insights</p>
       </div>
 
       {/* Metrics grid */}
@@ -129,23 +128,20 @@ export default function DashboardPage() {
           return (
             <div
               key={metric.id}
-              className={`metric-card group relative p-6 rounded-2xl bg-gradient-to-br ${metric.color} border transition-all duration-300 cursor-pointer overflow-hidden`}
-              style={{ borderColor: '#2a2a2a' }}
+              className={`metric-card group relative p-6 rounded-2xl bg-gradient-to-br ${metric.color} border border-gray-800 hover:border-accent/50 transition-all duration-300 cursor-pointer overflow-hidden`}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-accent/0 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity" />
 
               <div className="relative z-10">
                 {/* Icon and trend */}
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
-                    <Icon className="text-2xl" style={{ color: '#ffffff' }} />
+                  <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center">
+                    <Icon className="text-2xl text-white" />
                   </div>
                   <div
-                    className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold`}
-                    style={{
-                      background: metric.trend === 'up' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-                      color: metric.trend === 'up' ? '#10b981' : '#ef4444'
-                    }}
+                    className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
+                      metric.trend === 'up' ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'
+                    }`}
                   >
                     <TrendIcon className="text-sm" />
                     <span>{metric.change}</span>
@@ -153,15 +149,15 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Label */}
-                <p className="text-sm mb-2" style={{ color: '#a8a8a8' }}>{metric.label}</p>
+                <p className="text-sm text-gray-400 mb-2">{metric.label}</p>
 
                 {/* Value */}
-                <p className="text-3xl font-bold" style={{ color: '#ffffff' }}>{metric.value}</p>
+                <p className="text-3xl font-bold text-white">{metric.value}</p>
 
                 {/* Live indicator */}
                 <div className="flex items-center gap-2 mt-3">
-                  <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#10b981' }} />
-                  <span className="text-xs" style={{ color: '#666666' }}>Live</span>
+                  <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                  <span className="text-xs text-gray-600">Live</span>
                 </div>
               </div>
             </div>
@@ -170,13 +166,10 @@ export default function DashboardPage() {
       </div>
 
       {/* Recent queries */}
-      <div className="rounded-2xl p-6" style={{ 
-        background: 'linear-gradient(135deg, rgba(26, 26, 26, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%)',
-        border: '1px solid #2a2a2a'
-      }}>
+      <div className="rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0f172a] border border-gray-800 p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold" style={{ color: '#ffffff' }}>Recent Queries</h2>
-          <button className="text-sm transition-colors flex items-center gap-1" style={{ color: '#5b47fb' }}>
+          <h2 className="text-xl font-bold text-white">Recent Queries</h2>
+          <button className="text-sm text-accent hover:text-accent/80 transition-colors flex items-center gap-1">
             View All
             <RiArrowUpLine className="rotate-90" />
           </button>
@@ -188,27 +181,21 @@ export default function DashboardPage() {
             return (
               <div
                 key={query.id}
-                className="flex items-center justify-between p-4 rounded-xl border transition-all cursor-pointer group"
-                style={{ 
-                  background: 'rgba(15, 23, 42, 0.5)',
-                  borderColor: '#2a2a2a'
-                }}
+                className="flex items-center justify-between p-4 rounded-xl bg-[#0f172a]/50 border border-gray-800 hover:border-accent/30 transition-colors cursor-pointer group"
               >
                 <div className="flex items-center gap-4 flex-1">
-                  <RiSearchLine className="text-xl group-hover:text-[#5b47fb] transition-colors" style={{ color: '#a8a8a8' }} />
+                  <RiSearchLine className="text-xl text-gray-400 group-hover:text-accent transition-colors" />
                   <div className="flex-1">
-                    <p className="font-medium mb-1 group-hover:text-[#5b47fb] transition-colors" style={{ color: '#ffffff' }}>
+                    <p className="text-white font-medium mb-1 group-hover:text-accent transition-colors">
                       {query.text}
                     </p>
-                    <p className="text-sm" style={{ color: '#666666' }}>{query.time}</p>
+                    <p className="text-sm text-gray-600">{query.time}</p>
                   </div>
                 </div>
                 <div
-                  className="flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold"
-                  style={{
-                    background: query.status === 'success' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-                    color: query.status === 'success' ? '#10b981' : '#ef4444'
-                  }}
+                  className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold ${
+                    query.status === 'success' ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'
+                  }`}
                 >
                   <StatusIcon className="text-sm" />
                   <span>{query.status}</span>
@@ -226,46 +213,33 @@ export default function DashboardPage() {
             icon: RiSearchLine,
             title: 'New Query',
             desc: 'Ask a question',
-            gradient: 'linear-gradient(135deg, rgba(91, 71, 251, 0.1) 0%, rgba(91, 71, 251, 0.05) 100%)',
-            border: '#5b47fb'
+            color: 'from-accent/10 to-accent/5 border-accent/20 hover:border-accent/50'
           },
           {
             icon: RiDashboardLine,
             title: 'Create Dashboard',
             desc: 'Build custom view',
-            gradient: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%)',
-            border: '#8b5cf6'
+            color: 'from-purple-500/10 to-purple-500/5 border-purple-500/20 hover:border-purple-500/50'
           },
           {
             icon: RiBellLine,
             title: 'Set Alert',
             desc: 'Monitor metrics',
-            gradient: 'linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%)',
-            border: '#f59e0b'
+            color: 'from-orange-500/10 to-orange-500/5 border-orange-500/20 hover:border-orange-500/50'
           }
         ].map((action, i) => {
           const ActionIcon = action.icon;
           return (
             <button
               key={i}
-              className="flex items-center gap-4 p-6 rounded-2xl border transition-all duration-300 group text-left"
-              style={{
-                background: action.gradient,
-                borderColor: action.border + '33'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = action.border + '80';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = action.border + '33';
-              }}
+              className={`flex items-center gap-4 p-6 rounded-2xl bg-gradient-to-br ${action.color} border transition-all duration-300 group text-left`}
             >
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
-                <ActionIcon className="text-2xl" style={{ color: '#ffffff' }} />
+              <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <ActionIcon className="text-2xl text-white" />
               </div>
               <div>
-                <h3 className="font-semibold mb-1" style={{ color: '#ffffff' }}>{action.title}</h3>
-                <p className="text-sm" style={{ color: '#a8a8a8' }}>{action.desc}</p>
+                <h3 className="text-white font-semibold mb-1">{action.title}</h3>
+                <p className="text-sm text-gray-400">{action.desc}</p>
               </div>
             </button>
           );
