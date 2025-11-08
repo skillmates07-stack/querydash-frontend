@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
+  RiPlugLine 
   RiDashboardLine,
   RiLineChartLine, 
   RiSearchLine,
@@ -132,5 +133,6 @@ export default function DashboardLayout({
     </div>
   );
 }
+
 
 
