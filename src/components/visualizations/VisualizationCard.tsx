@@ -2,14 +2,20 @@
 
 import { useVisualization } from '@/contexts/VisualizationContext';
 import ChartRenderer from './ChartRenderer';
-import { RiCloseLine, RiSettings4Line } from 'react-icons/ri';
+import { X, Settings2 } from 'lucide-react';
 
 interface VisualizationCardProps {
   visualization: any;
 }
 
 export default function VisualizationCard({ visualization }: VisualizationCardProps) {
-  const { updateVisualization, deleteVisualization, selectVisualization, selectedViz, activeDataSource } = useVisualization();
+  const { 
+    updateVisualization, 
+    deleteVisualization, 
+    selectVisualization, 
+    selectedViz, 
+    activeDataSource 
+  } = useVisualization();
 
   return (
     <div
@@ -38,7 +44,7 @@ export default function VisualizationCard({ visualization }: VisualizationCardPr
             }}
             className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-all"
           >
-            <RiSettings4Line className="text-white" />
+            <Settings2 className="w-4 h-4 text-white" />
           </button>
           <button
             onClick={(e) => {
@@ -47,7 +53,7 @@ export default function VisualizationCard({ visualization }: VisualizationCardPr
             }}
             className="p-2 rounded-lg bg-danger/10 hover:bg-danger/20 transition-all"
           >
-            <RiCloseLine className="text-danger" />
+            <X className="w-4 h-4 text-danger" />
           </button>
         </div>
       </div>
