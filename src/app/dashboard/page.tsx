@@ -9,7 +9,7 @@ import {
   RiFlashlightLine,
   RiArrowUpLine,
   RiCheckboxCircleLine,
-  RiErrorWarningLine,
+  RiErrorWarningLine
   RiLineChartLine,
 } from 'react-icons/ri';
 
@@ -276,5 +276,6 @@ export default function DashboardPage() {
     </div>
   );
 }
+
 
 
