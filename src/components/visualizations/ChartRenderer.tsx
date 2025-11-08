@@ -4,7 +4,7 @@ import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
-import { RiDatabase2Line } from 'react-icons/ri';
+import { Database } from 'lucide-react';
 
 const CHART_COLORS = ['#5b47fb', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
@@ -25,7 +25,7 @@ export default function ChartRenderer({ type, data, xAxis, yAxis, config }: Char
     return (
       <div className="h-full flex items-center justify-center text-gray-500">
         <div className="text-center">
-          <RiDatabase2Line className="text-5xl mx-auto mb-3 opacity-50" />
+          <Database className="w-12 h-12 mx-auto mb-3 opacity-50" />
           <p className="text-sm">Configure axes to visualize data</p>
         </div>
       </div>
