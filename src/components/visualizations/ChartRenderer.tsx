@@ -4,9 +4,6 @@ import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
-export default function ChartRenderer({ type, data, xAxis, yAxis, config }: ChartRendererProps) {
-  // ...rest stays the same
-
 import { Database } from 'lucide-react';
 
 const CHART_COLORS = ['#5b47fb', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
