@@ -28,27 +28,27 @@ interface DataSource {
   size: string;
 }
 
-const [dataSources, setDataSources] = useState<DataSource[]>([
-  {
-    id: '1',
-    name: 'Sales Data 2024.xlsx',
-    type: 'excel',
-    status: 'active',
-    rows: 12500,
-    lastSync: '2 min ago',
-    size: '2.3 MB'
-  },
-  {
-    id: '2',
-    name: 'Customer Database',
-    type: 'database',
-    status: 'active',
-    rows: 45000,
-    lastSync: '1 min ago',
-    size: '8.7 MB'
-  }
-]);
-
+export default function DataSourcesPage() {
+  const [dataSources, setDataSources] = useState<DataSource[]>([
+    {
+      id: '1',
+      name: 'Sales Data 2024.xlsx',
+      type: 'excel',
+      status: 'active',
+      rows: 12500,
+      lastSync: '2 min ago',
+      size: '2.3 MB'
+    },
+    {
+      id: '2',
+      name: 'Customer Database',
+      type: 'database',
+      status: 'active',
+      rows: 45000,
+      lastSync: '1 min ago',
+      size: '8.7 MB'
+    }
+  ]);
 
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -59,7 +59,6 @@ const [dataSources, setDataSources] = useState<DataSource[]>([
 
     setUploading(true);
 
-    // Simulate upload
     setTimeout(() => {
       const file = files[0];
       const newSource: DataSource = {
@@ -82,15 +81,30 @@ const [dataSources, setDataSources] = useState<DataSource[]>([
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-white mb-2">Data Sources</h1>
         <p className="text-gray-400">Upload files or connect to databases</p>
       </div>
 
-      {/* Upload section */}
+      <div className="grid md:grid-cols-3 gap-4">
+        <div className="p-6 rounded-2xl bg-gradient-to-br from-accent/20 to-accent/5 border border-accent/20">
+          <p className="text-sm text-gray-400 mb-2">Connected</p>
+          <p className="text-4xl font-bold text-white mb-1">{dataSources.length}</p>
+          <p className="text-sm text-accent">Active integrations</p>
+        </div>
+        <div className="p-6 rounded-2xl bg-[#1a1a1a] border border-gray-800">
+          <p className="text-sm text-gray-400 mb-2">Available</p>
+          <p className="text-4xl font-bold text-white mb-1">9</p>
+          <p className="text-sm text-gray-500">Total connectors</p>
+        </div>
+        <div className="p-6 rounded-2xl bg-[#1a1a1a] border border-gray-800">
+          <p className="text-sm text-gray-400 mb-2">Setup Time</p>
+          <p className="text-4xl font-bold text-white mb-1">&lt;10m</p>
+          <p className="text-sm text-gray-500">Average time</p>
+        </div>
+      </div>
+
       <div className="grid md:grid-cols-2 gap-6">
-        {/* File upload */}
         <div
           onClick={() => fileInputRef.current?.click()}
           className="group relative p-8 rounded-2xl border-2 border-dashed border-gray-800 hover:border-accent/50 transition-all cursor-pointer bg-gradient-to-br from-[#1a1a1a] to-[#0f172a]"
@@ -130,7 +144,6 @@ const [dataSources, setDataSources] = useState<DataSource[]>([
           </div>
         </div>
 
-        {/* Google Sheets */}
         <button className="group p-8 rounded-2xl border-2 border-gray-800 hover:border-accent/50 transition-all text-left bg-gradient-to-br from-[#1a1a1a] to-[#0f172a]">
           <div className="w-16 h-16 mb-4 rounded-2xl bg-green-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
             <RiGoogleLine className="text-4xl text-green-500" />
@@ -142,7 +155,6 @@ const [dataSources, setDataSources] = useState<DataSource[]>([
         </button>
       </div>
 
-      {/* Quick connect options */}
       <div className="grid md:grid-cols-4 gap-4">
         {[
           { icon: RiDatabase2Line, name: 'PostgreSQL', color: '#3b82f6' },
@@ -168,7 +180,6 @@ const [dataSources, setDataSources] = useState<DataSource[]>([
         })}
       </div>
 
-      {/* Active data sources */}
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-white">Active Data Sources</h2>
@@ -239,7 +250,6 @@ const [dataSources, setDataSources] = useState<DataSource[]>([
         </div>
       </div>
 
-      {/* Features info */}
       <div className="grid md:grid-cols-3 gap-4">
         {[
           {
