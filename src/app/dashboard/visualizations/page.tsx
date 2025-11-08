@@ -8,9 +8,7 @@ import {
   RiPieChart2Line,
   RiTableLine,
   RiNumbersLine,
-  RiArrowDownSLine,
   RiCloseLine,
-  RiSettings4Line,
   RiSaveLine,
   RiShareLine,
   RiDownloadLine,
@@ -64,7 +62,6 @@ export default function VisualizationsPage() {
   const [showDataPanel, setShowDataPanel] = useState(true);
   const [showConfigPanel, setShowConfigPanel] = useState(false);
 
-  // Load data from localStorage
   useEffect(() => {
     const saved = localStorage.getItem('activeDataSource');
     if (saved) {
@@ -108,7 +105,7 @@ export default function VisualizationsPage() {
         <div className="h-full flex items-center justify-center text-gray-500">
           <div className="text-center">
             <RiDatabase2Line className="text-5xl mx-auto mb-3 opacity-50" />
-            <p className="text-sm">Drag fields to X and Y axes</p>
+            <p className="text-sm">Configure X and Y axes</p>
           </div>
         </div>
       );
@@ -189,10 +186,13 @@ export default function VisualizationsPage() {
           </ResponsiveContainer>
         );
 
-      case 'pie':
+      case 'pie': {
+        const xKey = viz.xAxis;
+        const yKey = viz.yAxis;
+
         const pieData = chartData.slice(0, 6).map((item, index) => ({
-          name: item[viz.xAxis],
-          value: parseFloat(item[viz.yAxis]) || 0
+          name: String(item[xKey] || 'Unknown'),
+          value: parseFloat(String(item[yKey])) || 0
         }));
 
         return (
@@ -216,11 +216,14 @@ export default function VisualizationsPage() {
             </PieChart>
           </ResponsiveContainer>
         );
+      }
 
-      case 'metric':
+      case 'metric': {
+        const yMetricKey = viz.yAxis;
         const metricValue = chartData.reduce((sum, item) => 
-          sum + (parseFloat(item[viz.yAxis]) || 0), 0
+          sum + (parseFloat(String(item[yMetricKey])) || 0), 0
         );
+        
         return (
           <div className="h-full flex flex-col items-center justify-center">
             <p className="text-sm text-gray-400 mb-2">{viz.yAxis}</p>
@@ -229,8 +232,12 @@ export default function VisualizationsPage() {
             </p>
           </div>
         );
+      }
 
-      case 'table':
+      case 'table': {
+        const xTableKey = viz.xAxis;
+        const yTableKey = viz.yAxis;
+
         return (
           <div className="h-full overflow-auto">
             <table className="w-full text-sm">
@@ -247,14 +254,15 @@ export default function VisualizationsPage() {
               <tbody>
                 {chartData.map((row, i) => (
                   <tr key={i} className="border-b border-gray-800/50 hover:bg-white/5">
-                    <td className="p-3 text-gray-300">{row[viz.xAxis]}</td>
-                    <td className="p-3 text-gray-300">{row[viz.yAxis]}</td>
+                    <td className="p-3 text-gray-300">{String(row[xTableKey] || '-')}</td>
+                    <td className="p-3 text-gray-300">{String(row[yTableKey] || '-')}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         );
+      }
 
       default:
         return null;
@@ -337,7 +345,7 @@ export default function VisualizationsPage() {
               </div>
 
               {/* Data Fields */}
-              {dataSource && (
+              {dataSource ? (
                 <div>
                   <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
                     Fields ({dataSource.columns.length})
@@ -353,9 +361,7 @@ export default function VisualizationsPage() {
                     ))}
                   </div>
                 </div>
-              )}
-
-              {!dataSource && (
+              ) : (
                 <div className="text-center py-12">
                   <RiDatabase2Line className="text-5xl text-gray-600 mx-auto mb-4" />
                   <p className="text-gray-500 mb-4">No data source loaded</p>
@@ -446,7 +452,6 @@ export default function VisualizationsPage() {
                 </button>
               </div>
 
-              {/* Axes Configuration */}
               <div className="space-y-4">
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
