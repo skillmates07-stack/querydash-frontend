@@ -6,15 +6,15 @@ import { X, Settings2 } from 'lucide-react';
 
 interface VisualizationCardProps {
   visualization: any;
+  data: any[];
 }
 
-export default function VisualizationCard({ visualization }: VisualizationCardProps) {
+export default function VisualizationCard({ visualization, data }: VisualizationCardProps) {
   const { 
     updateVisualization, 
     deleteVisualization, 
     selectVisualization, 
-    selectedViz, 
-    activeDataSource 
+    selectedViz 
   } = useVisualization();
 
   return (
@@ -62,7 +62,7 @@ export default function VisualizationCard({ visualization }: VisualizationCardPr
       <div className="h-80 rounded-lg bg-[#0d0d0d] overflow-hidden">
         <ChartRenderer 
           type={visualization.type}
-          data={activeDataSource?.data || []}
+          data={data}
           xAxis={visualization.xAxis}
           yAxis={visualization.yAxis}
           config={visualization.config}
