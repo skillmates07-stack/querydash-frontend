@@ -16,7 +16,6 @@ import {
   RiDownloadLine,
   RiErrorWarningLine
 } from 'react-icons/ri';
-om 'react-icons/ri';
 
 interface DataSource {
   id: string;
