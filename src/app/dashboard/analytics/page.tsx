@@ -30,7 +30,6 @@ export default function AnalyticsPage() {
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [lastUpdated, setLastUpdated] = useState(new Date());
 
-  // Revenue trend data
   const [revenueData, setRevenueData] = useState([
     { date: 'Mon', revenue: 4200, users: 234 },
     { date: 'Tue', revenue: 5100, users: 289 },
@@ -41,18 +40,14 @@ export default function AnalyticsPage() {
     { date: 'Sun', revenue: 6800, users: 298 }
   ]);
 
-  // User activity data
   const activityData = [
-    { name: 'Homepage', value: 450 },
-    { name: 'Pricing', value: 234 },
-    { name: 'Dashboard', value: 189 },
-    { name: 'Checkout', value: 89 },
-    { name: 'Other', value: 72 }
+    { name: 'Homepage', value: 450, color: '#5b47fb' },
+    { name: 'Pricing', value: 234, color: '#7c66ff' },
+    { name: 'Dashboard', value: 189, color: '#3b82f6' },
+    { name: 'Checkout', value: 89, color: '#8b5cf6' },
+    { name: 'Other', value: 72, color: '#a8a8a8' }
   ];
 
-  const COLORS = ['#5b47fb', '#7c66ff', '#3b82f6', '#8b5cf6', '#a8a8a8'];
-
-  // Simulate real-time updates
   useEffect(() => {
     if (!autoRefresh) return;
 
@@ -60,12 +55,13 @@ export default function AnalyticsPage() {
       setRevenueData(prev => {
         const newData = [...prev];
         const lastPoint = newData[newData.length - 1];
+        newData.shift();
         newData.push({
           date: 'Now',
-          revenue: lastPoint.revenue + Math.floor(Math.random() * 1000 - 500),
-          users: lastPoint.users + Math.floor(Math.random() * 50 - 25)
+          revenue: Math.max(3000, lastPoint.revenue + Math.floor(Math.random() * 1000 - 500)),
+          users: Math.max(200, lastPoint.users + Math.floor(Math.random() * 50 - 25))
         });
-        return newData.slice(-7);
+        return newData;
       });
       setLastUpdated(new Date());
     }, 5000);
@@ -76,14 +72,13 @@ export default function AnalyticsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-white mb-2">Analytics</h1>
           <p className="text-gray-400">Real-time business metrics</p>
         </div>
 
-        <div className="flex items-center gap-3">
-          {/* Time range selector */}
+        <div className="flex flex-wrap items-center gap-3">
           <select
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
@@ -95,7 +90,6 @@ export default function AnalyticsPage() {
             <option value="90d">Last 90 days</option>
           </select>
 
-          {/* Auto-refresh toggle */}
           <button
             onClick={() => setAutoRefresh(!autoRefresh)}
             className={`px-4 py-2 rounded-lg border transition-all ${
@@ -104,18 +98,17 @@ export default function AnalyticsPage() {
                 : 'bg-[#1a1a1a] border-gray-800 text-gray-400'
             }`}
           >
-            <RiRefreshLine className={`text-xl ${autoRefresh ? 'animate-spin' : ''}`} />
+            <RiRefreshLine className={`text-xl ${autoRefresh ? 'animate-spin-slow' : ''}`} />
           </button>
 
-          {/* Export button */}
           <button className="px-4 py-2 rounded-lg bg-[#1a1a1a] border border-gray-800 text-white hover:border-accent transition-all flex items-center gap-2">
             <RiDownloadLine />
-            <span>Export</span>
+            <span className="hidden sm:inline">Export</span>
           </button>
         </div>
       </div>
 
-      {/* Last updated indicator */}
+      {/* Last updated */}
       <div className="flex items-center gap-2 text-sm text-gray-500">
         <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
         <span>Last updated: {lastUpdated.toLocaleTimeString()}</span>
@@ -126,16 +119,16 @@ export default function AnalyticsPage() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-xl font-bold text-white mb-1">Revenue & User Growth</h2>
-            <p className="text-sm text-gray-400">Real-time metrics updating every 5 seconds</p>
+            <p className="text-sm text-gray-400">Live updates every 5 seconds</p>
           </div>
           <RiLineChartLine className="text-2xl text-accent" />
         </div>
 
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={350}>
           <LineChart data={revenueData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
-            <XAxis dataKey="date" stroke="#a8a8a8" />
-            <YAxis stroke="#a8a8a8" />
+            <XAxis dataKey="date" stroke="#a8a8a8" style={{ fontSize: '12px' }} />
+            <YAxis stroke="#a8a8a8" style={{ fontSize: '12px' }} />
             <Tooltip
               contentStyle={{
                 backgroundColor: '#1a1a1a',
@@ -149,15 +142,17 @@ export default function AnalyticsPage() {
               type="monotone"
               dataKey="revenue"
               stroke="#5b47fb"
-              strokeWidth={2}
-              dot={{ fill: '#5b47fb', r: 4 }}
+              strokeWidth={3}
+              dot={{ fill: '#5b47fb', r: 5 }}
+              activeDot={{ r: 7 }}
             />
             <Line
               type="monotone"
               dataKey="users"
               stroke="#10b981"
-              strokeWidth={2}
-              dot={{ fill: '#10b981', r: 4 }}
+              strokeWidth={3}
+              dot={{ fill: '#10b981', r: 5 }}
+              activeDot={{ r: 7 }}
             />
           </LineChart>
         </ResponsiveContainer>
@@ -188,14 +183,15 @@ export default function AnalyticsPage() {
                 dataKey="value"
               >
                 {activityData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
               <Tooltip
                 contentStyle={{
                   backgroundColor: '#1a1a1a',
                   border: '1px solid #2a2a2a',
-                  borderRadius: '8px'
+                  borderRadius: '8px',
+                  color: '#ffffff'
                 }}
               />
             </PieChart>
@@ -213,22 +209,55 @@ export default function AnalyticsPage() {
           </div>
 
           <div className="space-y-3">
-            {activityData.map((page, i) => (
-              <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-[#0d0d0d] border border-gray-800">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center text-accent font-bold">
-                    {i + 1}
+            {activityData.map((page, i) => {
+              const total = activityData.reduce((sum, p) => sum + p.value, 0);
+              const percentage = ((page.value / total) * 100).toFixed(0);
+              
+              return (
+                <div key={i} className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm"
+                        style={{ backgroundColor: page.color + '20', color: page.color }}
+                      >
+                        {i + 1}
+                      </div>
+                      <span className="text-white font-medium">{page.name}</span>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-white font-bold">{page.value}</p>
+                      <p className="text-xs text-gray-500">{percentage}%</p>
+                    </div>
                   </div>
-                  <span className="text-white font-medium">{page.name}</span>
+                  <div className="w-full h-2 bg-[#0d0d0d] rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all duration-500"
+                      style={{ width: `${percentage}%`, backgroundColor: page.color }}
+                    />
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-white font-bold">{page.value}</p>
-                  <p className="text-xs text-gray-500">visitors</p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
+      </div>
+
+      {/* Performance Metrics */}
+      <div className="grid md:grid-cols-3 gap-4">
+        {[
+          { label: 'Avg. Session', value: '4m 32s', change: '+12%', trend: 'up' },
+          { label: 'Bounce Rate', value: '23.5%', change: '-8%', trend: 'down' },
+          { label: 'Page Views', value: '12.4K', change: '+18%', trend: 'up' }
+        ].map((metric, i) => (
+          <div key={i} className="p-6 rounded-2xl bg-[#1a1a1a] border border-gray-800">
+            <p className="text-sm text-gray-400 mb-2">{metric.label}</p>
+            <p className="text-3xl font-bold text-white mb-2">{metric.value}</p>
+            <span className={`text-sm font-semibold ${metric.trend === 'up' ? 'text-success' : 'text-danger'}`}>
+              {metric.change} vs last period
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );
