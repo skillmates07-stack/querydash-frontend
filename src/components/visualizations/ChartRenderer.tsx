@@ -1,21 +1,8 @@
 'use client';
 
 import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer
+  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
 import { RiDatabase2Line } from 'react-icons/ri';
 
@@ -34,32 +21,33 @@ interface ChartRendererProps {
 }
 
 export default function ChartRenderer({ type, data, xAxis, yAxis, config }: ChartRendererProps) {
-  if (!xAxis || !yAxis) {
+  if (!xAxis || !yAxis || !data.length) {
     return (
       <div className="h-full flex items-center justify-center text-gray-500">
         <div className="text-center">
           <RiDatabase2Line className="text-5xl mx-auto mb-3 opacity-50" />
-          <p className="text-sm">Configure X and Y axes</p>
+          <p className="text-sm">Configure axes to visualize data</p>
         </div>
       </div>
     );
   }
 
-  const chartData = data.slice(0, 20);
+  const chartData = data.slice(0, 50);
 
   switch (type) {
     case 'line':
       return (
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={chartData}>
+          <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
             {config.showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />}
-            <XAxis dataKey={xAxis} stroke="#9ca3af" />
-            <YAxis stroke="#9ca3af" />
+            <XAxis dataKey={xAxis} stroke="#9ca3af" style={{ fontSize: '12px' }} />
+            <YAxis stroke="#9ca3af" style={{ fontSize: '12px' }} />
             <Tooltip 
               contentStyle={{ 
                 backgroundColor: '#1a1a1a', 
                 border: '1px solid #2a2a2a',
-                borderRadius: '8px'
+                borderRadius: '8px',
+                fontSize: '12px'
               }} 
             />
             {config.showLegend && <Legend />}
@@ -69,6 +57,7 @@ export default function ChartRenderer({ type, data, xAxis, yAxis, config }: Char
               stroke={config.color} 
               strokeWidth={3}
               dot={{ fill: config.color, r: 4 }}
+              activeDot={{ r: 6 }}
             />
           </LineChart>
         </ResponsiveContainer>
@@ -77,15 +66,16 @@ export default function ChartRenderer({ type, data, xAxis, yAxis, config }: Char
     case 'bar':
       return (
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData}>
+          <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
             {config.showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />}
-            <XAxis dataKey={xAxis} stroke="#9ca3af" />
-            <YAxis stroke="#9ca3af" />
+            <XAxis dataKey={xAxis} stroke="#9ca3af" style={{ fontSize: '12px' }} />
+            <YAxis stroke="#9ca3af" style={{ fontSize: '12px' }} />
             <Tooltip 
               contentStyle={{ 
                 backgroundColor: '#1a1a1a', 
                 border: '1px solid #2a2a2a',
-                borderRadius: '8px'
+                borderRadius: '8px',
+                fontSize: '12px'
               }} 
             />
             {config.showLegend && <Legend />}
@@ -97,15 +87,16 @@ export default function ChartRenderer({ type, data, xAxis, yAxis, config }: Char
     case 'area':
       return (
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={chartData}>
+          <AreaChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
             {config.showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />}
-            <XAxis dataKey={xAxis} stroke="#9ca3af" />
-            <YAxis stroke="#9ca3af" />
+            <XAxis dataKey={xAxis} stroke="#9ca3af" style={{ fontSize: '12px' }} />
+            <YAxis stroke="#9ca3af" style={{ fontSize: '12px' }} />
             <Tooltip 
               contentStyle={{ 
                 backgroundColor: '#1a1a1a', 
                 border: '1px solid #2a2a2a',
-                borderRadius: '8px'
+                borderRadius: '8px',
+                fontSize: '12px'
               }} 
             />
             {config.showLegend && <Legend />}
@@ -121,9 +112,11 @@ export default function ChartRenderer({ type, data, xAxis, yAxis, config }: Char
       );
 
     case 'pie':
-      const pieData = chartData.slice(0, 6).map((item, index) => ({
-        name: item[xAxis],
-        value: parseFloat(item[yAxis]) || 0
+      const xKey = xAxis;
+      const yKey = yAxis;
+      const pieData = chartData.slice(0, 6).map((item) => ({
+        name: String(item[xKey] || 'Unknown'),
+        value: parseFloat(String(item[yKey])) || 0
       }));
 
       return (
@@ -134,8 +127,8 @@ export default function ChartRenderer({ type, data, xAxis, yAxis, config }: Char
               cx="50%"
               cy="50%"
               labelLine={false}
-              label={(entry) => entry.name}
-              outerRadius={80}
+              label={(entry) => `${entry.name}: ${entry.value}`}
+              outerRadius={100}
               fill="#8884d8"
               dataKey="value"
             >
@@ -149,37 +142,43 @@ export default function ChartRenderer({ type, data, xAxis, yAxis, config }: Char
       );
 
     case 'metric':
+      const yMetricKey = yAxis;
       const metricValue = chartData.reduce((sum, item) => 
-        sum + (parseFloat(item[yAxis]) || 0), 0
+        sum + (parseFloat(String(item[yMetricKey])) || 0), 0
       );
+      
       return (
         <div className="h-full flex flex-col items-center justify-center">
-          <p className="text-sm text-gray-400 mb-2">{yAxis}</p>
-          <p className="text-6xl font-bold" style={{ color: config.color }}>
+          <p className="text-sm text-gray-400 mb-3 uppercase tracking-wider">{yAxis}</p>
+          <p className="text-7xl font-bold mb-2" style={{ color: config.color }}>
             {metricValue.toLocaleString()}
           </p>
+          <p className="text-xs text-gray-500">{chartData.length} records</p>
         </div>
       );
 
     case 'table':
+      const xTableKey = xAxis;
+      const yTableKey = yAxis;
+
       return (
         <div className="h-full overflow-auto">
           <table className="w-full text-sm">
-            <thead className="sticky top-0 bg-[#1a1a1a]">
+            <thead className="sticky top-0 bg-[#0d0d0d]">
               <tr>
-                <th className="text-left p-3 font-semibold text-gray-300 border-b border-gray-800">
+                <th className="text-left p-3 font-semibold text-gray-300 border-b-2 border-accent/20">
                   {xAxis}
                 </th>
-                <th className="text-left p-3 font-semibold text-gray-300 border-b border-gray-800">
+                <th className="text-left p-3 font-semibold text-gray-300 border-b-2 border-accent/20">
                   {yAxis}
                 </th>
               </tr>
             </thead>
             <tbody>
               {chartData.map((row, i) => (
-                <tr key={i} className="border-b border-gray-800/50 hover:bg-white/5">
-                  <td className="p-3 text-gray-300">{row[xAxis]}</td>
-                  <td className="p-3 text-gray-300">{row[yAxis]}</td>
+                <tr key={i} className="border-b border-gray-800/50 hover:bg-white/5 transition-colors">
+                  <td className="p-3 text-gray-300">{String(row[xTableKey] || '-')}</td>
+                  <td className="p-3 text-gray-300">{String(row[yTableKey] || '-')}</td>
                 </tr>
               ))}
             </tbody>
