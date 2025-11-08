@@ -1,47 +1,118 @@
-import type { Metadata } from 'next';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Dashboard - QueryDash',
-  description: 'Real-time analytics dashboard'
-};
+import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
+
+  const navigation = [
+    { name: 'Overview', href: '/dashboard', icon: '📊' },
+    { name: 'Queries', href: '/dashboard/queries', icon: '🔍' },
+    { name: 'Alerts', href: '/dashboard/alerts', icon: '🔔' },
+    { name: 'User Tracking', href: '/dashboard/tracking', icon: '👥' },
+    { name: 'Settings', href: '/dashboard/settings', icon: '⚙️' }
+  ];
+
   return (
-    <div className="min-h-screen bg-primary">
-      {/* Dashboard Sidebar */}
-      <aside className="fixed left-0 top-0 h-screen w-64 bg-secondary border-r border-gray-700 p-6">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-accent">QueryDash</h2>
-          <p className="text-sm text-gray-400">Dashboard</p>
+    <div className="min-h-screen bg-[#0a0f1e]">
+      {/* Mobile sidebar backdrop */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`fixed top-0 left-0 h-screen w-64 bg-[#0f172a] border-r border-gray-800 z-50 transform transition-transform duration-300 ease-in-out ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } lg:translate-x-0`}
+      >
+        <div className="flex flex-col h-full">
+          {/* Logo */}
+          <div className="flex items-center gap-3 p-6 border-b border-gray-800">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-blue-600 flex items-center justify-center text-2xl">
+              ⚡
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-white">QueryDash</h2>
+              <p className="text-xs text-gray-400">Enterprise</p>
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+            {navigation.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all ${
+                    isActive
+                      ? 'bg-accent/10 text-accent'
+                      : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                  }`}
+                >
+                  <span className="text-xl">{item.icon}</span>
+                  <span>{item.name}</span>
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* User section */}
+          <div className="p-4 border-t border-gray-800">
+            <div className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/5 cursor-pointer transition-colors">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-purple-600 flex items-center justify-center text-white font-bold">
+                JD
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-white">John Doe</p>
+                <p className="text-xs text-gray-400">john@company.com</p>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <nav className="space-y-2">
-          <a href="/dashboard" className="block px-4 py-2 rounded-lg bg-accent/10 text-accent font-semibold">
-            📊 Overview
-          </a>
-          <a href="/dashboard/queries" className="block px-4 py-2 rounded-lg hover:bg-secondary text-gray-300 hover:text-white">
-            🔍 Queries
-          </a>
-          <a href="/dashboard/alerts" className="block px-4 py-2 rounded-lg hover:bg-secondary text-gray-300 hover:text-white">
-            🔔 Alerts
-          </a>
-          <a href="/dashboard/users" className="block px-4 py-2 rounded-lg hover:bg-secondary text-gray-300 hover:text-white">
-            👥 User Tracking
-          </a>
-          <a href="/dashboard/settings" className="block px-4 py-2 rounded-lg hover:bg-secondary text-gray-300 hover:text-white">
-            ⚙️ Settings
-          </a>
-        </nav>
       </aside>
 
-      {/* Main Content Area */}
-      <main className="ml-64 p-8">
-        {children}
-      </main>
+      {/* Main content */}
+      <div className="lg:ml-64">
+        {/* Top bar (mobile menu button) */}
+        <header className="sticky top-0 z-30 bg-[#0f172a]/80 backdrop-blur-xl border-b border-gray-800">
+          <div className="flex items-center justify-between px-4 py-4">
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="lg:hidden p-2 rounded-lg hover:bg-white/5 transition-colors"
+            >
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+
+            <div className="flex items-center gap-4">
+              {/* Status indicator */}
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/10 border border-success/20">
+                <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                <span className="text-xs font-medium text-success">All Systems Operational</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Page content */}
+        <main className="p-4 lg:p-8">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }
