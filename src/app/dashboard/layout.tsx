@@ -22,14 +22,14 @@ export default function DashboardLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
 
-  const navigation = [
-    { name: 'Overview', href: '/dashboard', icon: RiDashboardLine },
-    { name: 'Queries', href: '/dashboard/queries', icon: RiSearchLine },
-    { name: 'Alerts', href: '/dashboard/alerts', icon: RiBellLine },
-    { name: 'User Tracking', href: '/dashboard/tracking', icon: RiUserLocationLine },
-    { name: 'Settings', href: '/dashboard/settings', icon: RiSettings4Line }
-  ];
-
+ const navigation = [
+  { name: 'Overview', href: '/dashboard', icon: RiDashboardLine },
+  { name: 'Analytics', href: '/dashboard/analytics', icon: RiLineChartLine }, // ← ADD THIS
+  { name: 'Queries', href: '/dashboard/queries', icon: RiSearchLine },
+  { name: 'Alerts', href: '/dashboard/alerts', icon: RiBellLine },
+  { name: 'User Tracking', href: '/dashboard/tracking', icon: RiUserLocationLine },
+  { name: 'Settings', href: '/dashboard/settings', icon: RiSettings4Line }
+];
   return (
     <div className="min-h-screen bg-[#0a0f1e]">
       {/* Mobile sidebar backdrop */}
@@ -131,3 +131,4 @@ export default function DashboardLayout({
     </div>
   );
 }
+
