@@ -32,8 +32,9 @@ const navigation = [
   { name: 'Queries', href: '/dashboard/queries', icon: RiSearchLine },
   { name: 'Alerts', href: '/dashboard/alerts', icon: RiBellLine },
   { name: 'User Tracking', href: '/dashboard/tracking', icon: RiUserLocationLine },
-  { name: 'Settings', href: '/dashboard/settings', icon: RiSettings4Line },
   { name: 'Builder', href: '/dashboard/builder', icon: RiPencilLine }
+  { name: 'Settings', href: '/dashboard/settings', icon: RiSettings4Line }
+
 ];
 
   return (
@@ -137,6 +138,7 @@ const navigation = [
     </div>
   );
 }
+
 
 
 
