@@ -1,36 +1,31 @@
 'use client';
 import { useFiltering } from '@/contexts/FilteringContext';
 import { Calendar, Search, Filter, X } from 'lucide-react';
-import { useState } from 'react';
-// For production, connect to date picker (e.g., react-day-picker or headlessui DatePicker, or use your team's library).
 
 export default function FilteringPanel({ columns, categoryOptions }:{
   columns: string[];
   categoryOptions: Record<string, string[]>;
 }) {
   const { filters, setDateRange, setCategory, setSearch, clearFilters } = useFiltering();
-  const [dateOpen, setDateOpen] = useState(false);
 
-  // For demo purposes: date input, can replace with full-featured picker
   return (
-    <div className="w-full px-4 py-3 bg-[#181c29] border-b border-accent/20 flex items-center gap-3 flex-wrap z-20">
-      <div className="flex items-center gap-1">
+    <nav className="flex flex-nowrap items-center gap-3 min-w-0 w-full">
+      {/* Filter label */}
+      <div className="flex items-center gap-2">
         <Filter className="w-5 h-5 text-accent" />
-        <span className="font-medium text-accent">Filters</span>
+        <span className="font-semibold text-accent">Filters</span>
       </div>
-
-      {/* Search */}
+      {/* Search fields */}
       <div className="relative">
         <input
-          className="pl-9 pr-3 py-2 rounded bg-[#23283a] border border-gray-800 text-white text-sm focus:outline-none focus:ring-2 focus:ring-accent transition"
+          className="pl-9 pr-3 py-2 rounded bg-[#23283a] border border-gray-800 text-white text-sm focus:outline-none focus:ring-2 focus:ring-accent transition w-44"
           placeholder="Search (any field)..."
           value={filters.search}
           onChange={e => setSearch(e.target.value)}
         />
         <Search className="absolute top-2.5 left-2 w-4 h-4 text-gray-400" />
       </div>
-
-      {/* Date (replace input with a calendar widget) */}
+      {/* Date inputs */}
       <div className="flex items-center gap-1">
         <Calendar className="w-4 h-4 text-gray-400" />
         <input
@@ -53,8 +48,7 @@ export default function FilteringPanel({ columns, categoryOptions }:{
           })}
         />
       </div>
-
-      {/* Category Filters */}
+      {/* Category filters */}
       {Object.keys(categoryOptions).map(field => (
         <select
           multiple
@@ -74,16 +68,15 @@ export default function FilteringPanel({ columns, categoryOptions }:{
           ))}
         </select>
       ))}
-
       {/* Clear All */}
       <button
         onClick={clearFilters}
-        className="ml-auto flex items-center px-3 py-1.5 bg-danger/10 border border-danger/40 text-danger rounded-lg hover:bg-danger/20 transition"
+        className="flex items-center px-3 py-1.5 bg-danger/10 border border-danger/40 text-danger rounded-lg hover:bg-danger/20 transition ml-2"
         aria-label="Clear all filters"
       >
         <X className="w-4 h-4 mr-1" />
         Clear All
       </button>
-    </div>
+    </nav>
   );
 }
