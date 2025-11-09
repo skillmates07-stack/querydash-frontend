@@ -2,7 +2,6 @@
 import { useFiltering } from '@/contexts/FilteringContext';
 import { Filter, Calendar, Search, X } from 'lucide-react';
 
-// Add TypeScript props interfaces
 interface MultiSelectDropdownProps {
   field: string;
   options: string[];
@@ -10,18 +9,17 @@ interface MultiSelectDropdownProps {
   onChange: (selected: string[]) => void;
 }
 
-// Modular Multi-Select Dropdown with types
 function MultiSelectDropdown({ field, options, selected, onChange }: MultiSelectDropdownProps) {
   return (
-    <div className="flex flex-col min-w-[140px]">
-      <label className="text-xs text-gray-400 mb-1">{field}</label>
+    <div className="flex flex-col w-full">
+      <label className="text-sm font-semibold text-gray-300 mb-2">{field}</label>
       <select
         multiple
         value={selected}
         onChange={e =>
           onChange(Array.from(e.target.selectedOptions).map(opt => opt.value))
         }
-        className="rounded bg-[#23283a] border border-gray-800 text-white text-xs px-2 py-2"
+        className="rounded bg-[#23283a] border border-gray-700 text-white text-sm px-3 py-2 min-h-[100px] focus:outline-none focus:ring-2 focus:ring-accent"
       >
         {options.map(opt => (
           <option key={opt} value={opt}>{opt}</option>
@@ -31,7 +29,6 @@ function MultiSelectDropdown({ field, options, selected, onChange }: MultiSelect
   );
 }
 
-// Date range picker with types
 interface DateRangePickerProps {
   start: Date | null;
   end: Date | null;
@@ -40,32 +37,37 @@ interface DateRangePickerProps {
 
 function DateRangePicker({ start, end, onChange }: DateRangePickerProps) {
   return (
-    <div className="flex items-center gap-1">
-      <Calendar className="w-4 h-4 text-gray-400" />
-      <input
-        type="date"
-        className="bg-[#23283a] border border-gray-800 rounded px-2 py-2 text-white text-xs w-28"
-        value={start ? start.toISOString().slice(0,10) : ''}
-        onChange={e => onChange({
-          start: e.target.value ? new Date(e.target.value) : null,
-          end
-        })}
-      />
-      <span className="text-gray-400 mx-1">to</span>
-      <input
-        type="date"
-        className="bg-[#23283a] border border-gray-800 rounded px-2 py-2 text-white text-xs w-28"
-        value={end ? end.toISOString().slice(0,10) : ''}
-        onChange={e => onChange({
-          start,
-          end: e.target.value ? new Date(e.target.value) : null
-        })}
-      />
+    <div className="flex flex-col w-full">
+      <label className="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
+        <Calendar className="w-4 h-4" />
+        Date Range
+      </label>
+      <div className="flex flex-col gap-2">
+        <input
+          type="date"
+          className="bg-[#23283a] border border-gray-700 rounded px-3 py-2 text-white text-sm w-full focus:outline-none focus:ring-2 focus:ring-accent"
+          value={start ? start.toISOString().slice(0,10) : ''}
+          onChange={e => onChange({
+            start: e.target.value ? new Date(e.target.value) : null,
+            end
+          })}
+          placeholder="Start date"
+        />
+        <input
+          type="date"
+          className="bg-[#23283a] border border-gray-700 rounded px-3 py-2 text-white text-sm w-full focus:outline-none focus:ring-2 focus:ring-accent"
+          value={end ? end.toISOString().slice(0,10) : ''}
+          onChange={e => onChange({
+            start,
+            end: e.target.value ? new Date(e.target.value) : null
+          })}
+          placeholder="End date"
+        />
+      </div>
     </div>
   );
 }
 
-// Exported FilteringPanel with types
 interface FilteringPanelProps {
   columns: string[];
   categoryOptions: Record<string, string[]>;
@@ -75,29 +77,29 @@ export default function FilteringPanel({ columns, categoryOptions }: FilteringPa
   const { filters, setDateRange, setCategory, setSearch, clearFilters } = useFiltering();
 
   return (
-    <nav className="sticky flex flex-nowrap items-center gap-3 w-full bg-[#181c29] p-3 rounded-lg shadow-md z-30">
-      {/* Filter label */}
-      <div className="flex items-center gap-2 font-bold text-accent">
-        <Filter className="w-5 h-5" />
-        <span>Filters</span>
-      </div>
+    <div className="flex flex-col gap-6">
       {/* Search */}
-      <div className="relative">
+      <div className="flex flex-col w-full">
+        <label className="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
+          <Search className="w-4 h-4" />
+          Search
+        </label>
         <input
-          className="pl-8 pr-3 py-2 rounded bg-[#23283a] border border-gray-800 text-white text-sm focus:outline-none focus:ring-2 focus:ring-accent transition w-44"
-          placeholder="Search..."
+          className="px-3 py-2 rounded bg-[#23283a] border border-gray-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-accent transition w-full"
+          placeholder="Search all fields..."
           value={filters.search}
           onChange={e => setSearch(e.target.value)}
         />
-        <Search className="absolute top-2.5 left-2 w-4 h-4 text-gray-400" />
       </div>
-      {/* Date range */}
+
+      {/* Date Range */}
       <DateRangePicker
         start={filters.dateRange.start}
         end={filters.dateRange.end}
         onChange={setDateRange}
       />
-      {/* Category filters */}
+
+      {/* Category Filters */}
       {Object.keys(categoryOptions).map(field => (
         <MultiSelectDropdown
           key={field}
@@ -107,15 +109,16 @@ export default function FilteringPanel({ columns, categoryOptions }: FilteringPa
           onChange={sel => setCategory(field, sel)}
         />
       ))}
-      {/* Clear all filters */}
+
+      {/* Clear All */}
       <button
         onClick={clearFilters}
-        className="flex items-center px-3 py-1.5 bg-danger/10 border border-danger/40 text-danger rounded-lg hover:bg-danger/20 transition ml-2"
+        className="flex items-center justify-center gap-2 px-4 py-2 bg-red-600/20 border border-red-500/40 text-red-400 rounded-lg hover:bg-red-600/30 transition w-full font-semibold"
         aria-label="Clear all filters"
       >
-        <X className="w-4 h-4 mr-1" />
-        Clear All
+        <X className="w-4 h-4" />
+        Clear All Filters
       </button>
-    </nav>
+    </div>
   );
 }
