@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Select from 'react-select';
-import Range from 'rc-slider/lib/Range';
+import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { X } from 'lucide-react';
 import { useFiltering } from '@/contexts/FilteringContext';
@@ -11,6 +11,8 @@ export interface FilteringPanelProps {
   columns: string[];
   categoryOptions: Record<string, string[]>;
 }
+
+const Range = (Slider as any).Range;
 
 export default function FilteringPanel({ columns, categoryOptions }: FilteringPanelProps) {
   const {
@@ -33,12 +35,10 @@ export default function FilteringPanel({ columns, categoryOptions }: FilteringPa
         <span>Filters</span>
       </div>
 
-      {/* Global Search */}
       <div>
         <label className="mb-1 text-sm block text-gray-300">Search</label>
         <input
           type="search"
-          aria-label="Search"
           className="w-full rounded bg-[#23283a] border border-gray-700 px-3 py-2 text-white text-sm focus:ring-2 focus:ring-accent outline-none"
           placeholder="Search all fields"
           value={filters.search || ''}
@@ -46,7 +46,6 @@ export default function FilteringPanel({ columns, categoryOptions }: FilteringPa
         />
       </div>
 
-      {/* Category (multi-select) fields */}
       {Object.entries(categoryOptions).map(([field, options]) => (
         <div key={field}>
           <div className="mb-1 text-sm font-semibold text-gray-300">{field}</div>
@@ -62,7 +61,6 @@ export default function FilteringPanel({ columns, categoryOptions }: FilteringPa
         </div>
       ))}
 
-      {/* First numeric column as a slider */}
       {numericColumns.length > 0 && (
         <div>
           <div className="mb-1 text-sm font-semibold text-gray-300 flex justify-between">
@@ -87,7 +85,6 @@ export default function FilteringPanel({ columns, categoryOptions }: FilteringPa
         </div>
       )}
 
-      {/* Sticky bottom bar */}
       <div className="mt-auto flex justify-end items-center border-t border-gray-800 pt-3 gap-2">
         <button
           onClick={clearFilters}
