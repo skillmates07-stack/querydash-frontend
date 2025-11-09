@@ -34,7 +34,7 @@ export default function ConfigurationPanel({ columns, config, onChange }: Config
           value={config.type}
           onChange={e => onChange({ ...config, type: e.target.value })}
         >
-          {CHART_TYPES.map(opt => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
+          {CHART_TYPES.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
         </select>
       </div>
       <div>
@@ -45,7 +45,7 @@ export default function ConfigurationPanel({ columns, config, onChange }: Config
           onChange={e => onChange({ ...config, xField: e.target.value })}
         >
           <option value="">(Select column)</option>
-          {columns.map(col => (<option key={col} value={col}>{col}</option>))}
+          {columns.map(col => <option key={col} value={col}>{col}</option>)}
         </select>
       </div>
       <div>
@@ -56,7 +56,7 @@ export default function ConfigurationPanel({ columns, config, onChange }: Config
           onChange={e => onChange({ ...config, yField: e.target.value })}
         >
           <option value="">(Select column)</option>
-          {columns.map(col => (<option key={col} value={col}>{col}</option>))}
+          {columns.map(col => <option key={col} value={col}>{col}</option>)}
         </select>
       </div>
       <div className="flex items-center gap-2">
