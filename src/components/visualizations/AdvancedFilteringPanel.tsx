@@ -123,7 +123,7 @@ export default function AdvancedFilteringPanel({
               max={max * 1.5}
               allowCross={false}
               value={[min, max]}
-              onChange={(value) => setNumericRange(field, value as [number, number])}
+              onChange={(value: [number, number]) => setNumericRange(field, value)}
               trackStyle={[{ backgroundColor: '#7c3aed' }]}
               handleStyle={[
                 { borderColor: '#7c3aed' },
@@ -131,6 +131,7 @@ export default function AdvancedFilteringPanel({
               ]}
               railStyle={{ backgroundColor: '#333' }}
             />
+
           </div>
         );
       })}
