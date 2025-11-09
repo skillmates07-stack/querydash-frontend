@@ -15,7 +15,7 @@ interface OptionType {
 interface AdvancedFilteringPanelProps {
   columns: string[];
   categoryOptions: Record<string, string[]>;
-  numericOptions: string[]; // columns with numeric data to show sliders for
+  numericOptions: string[];
 }
 
 export default function AdvancedFilteringPanel({
@@ -32,19 +32,15 @@ export default function AdvancedFilteringPanel({
     clearFilters,
   } = useFiltering();
 
-  // Helper to build react-select options
   const buildOptions = (arr: string[]) =>
     arr.map((v) => ({ label: v, value: v }));
 
   return (
     <nav className="flex flex-col gap-6 w-full p-4 bg-[#161a27] text-white rounded-lg shadow-md">
-      {/* Header */}
       <div className="flex items-center gap-2 font-bold text-accent mb-2">
         <Filter size={20} />
         <span>Filters</span>
       </div>
-
-      {/* Search input */}
       <div>
         <div className="flex items-center mb-1 gap-2 text-sm text-gray-300">
           <Search size={16} />
@@ -59,8 +55,6 @@ export default function AdvancedFilteringPanel({
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
-
-      {/* Date Range picker */}
       <div>
         <div className="flex items-center mb-1 gap-2 text-sm text-gray-300">
           <Calendar size={16} />
@@ -85,8 +79,6 @@ export default function AdvancedFilteringPanel({
           />
         </div>
       </div>
-
-      {/* Category multi-selects */}
       {Object.entries(categoryOptions).map(([field, options]) => (
         <div key={field}>
           <div className="mb-1 text-sm font-semibold text-gray-300">{field}</div>
@@ -106,12 +98,10 @@ export default function AdvancedFilteringPanel({
           />
         </div>
       ))}
-
-      {/* Numeric range sliders */}
       {numericOptions.map((field) => {
         const [min, max] = filters.numericRanges?.[field]?.length === 2
           ? filters.numericRanges[field]
-          : [0, 100]; // fallback range
+          : [0, 100];
         return (
           <div key={field}>
             <div className="mb-1 text-sm font-semibold text-gray-300 flex justify-between">
@@ -131,12 +121,9 @@ export default function AdvancedFilteringPanel({
               ]}
               railStyle={{ backgroundColor: '#333' }}
             />
-
           </div>
         );
       })}
-
-      {/* Clear all filters button */}
       <button
         onClick={clearFilters}
         className="flex justify-center gap-2 items-center px-4 py-2 bg-red-700 hover:bg-red-800 rounded font-semibold text-white mt-4"
