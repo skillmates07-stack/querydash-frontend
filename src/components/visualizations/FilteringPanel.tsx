@@ -2,8 +2,16 @@
 import { useFiltering } from '@/contexts/FilteringContext';
 import { Filter, Calendar, Search, X } from 'lucide-react';
 
-// Modular Multi-Select Dropdown
-function MultiSelectDropdown({ field, options, selected, onChange }) {
+// Add TypeScript props interfaces
+interface MultiSelectDropdownProps {
+  field: string;
+  options: string[];
+  selected: string[];
+  onChange: (selected: string[]) => void;
+}
+
+// Modular Multi-Select Dropdown with types
+function MultiSelectDropdown({ field, options, selected, onChange }: MultiSelectDropdownProps) {
   return (
     <div className="flex flex-col min-w-[140px]">
       <label className="text-xs text-gray-400 mb-1">{field}</label>
@@ -23,8 +31,14 @@ function MultiSelectDropdown({ field, options, selected, onChange }) {
   );
 }
 
-// Modular Date Range Picker
-function DateRangePicker({ start, end, onChange }) {
+// Date range picker with types
+interface DateRangePickerProps {
+  start: Date | null;
+  end: Date | null;
+  onChange: (dates: { start: Date | null; end: Date | null }) => void;
+}
+
+function DateRangePicker({ start, end, onChange }: DateRangePickerProps) {
   return (
     <div className="flex items-center gap-1">
       <Calendar className="w-4 h-4 text-gray-400" />
@@ -51,7 +65,13 @@ function DateRangePicker({ start, end, onChange }) {
   );
 }
 
-export default function FilteringPanel({ columns, categoryOptions }) {
+// Exported FilteringPanel with types
+interface FilteringPanelProps {
+  columns: string[];
+  categoryOptions: Record<string, string[]>;
+}
+
+export default function FilteringPanel({ columns, categoryOptions }: FilteringPanelProps) {
   const { filters, setDateRange, setCategory, setSearch, clearFilters } = useFiltering();
 
   return (
