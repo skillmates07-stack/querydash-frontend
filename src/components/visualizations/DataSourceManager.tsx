@@ -6,8 +6,7 @@ import {
   RiUploadCloudLine,
   RiFileExcelLine,
   RiCloseLine,
-  RiDeleteBin6Line,
-  RiCheckLine
+  RiCheckLine,
 } from 'react-icons/ri';
 
 export default function DataSourceManager() {
@@ -22,25 +21,33 @@ export default function DataSourceManager() {
     setUploading(true);
 
     try {
-      const file = files[0];
-      const formData = new FormData();
-      formData.append('file', file);
+      // Upload all files one by one (enhance as needed)
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const formData = new FormData();
+        formData.append('file', file);
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dashboards/upload`, {
-        method: 'POST',
-        body: formData
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        addDataSource({
-          id: result.data.id,
-          name: result.data.name,
-          rows: result.data.rows,
-          columns: result.data.columns,
-          data: result.data.preview
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dashboards/upload`, {
+          method: 'POST',
+          body: formData,
         });
+
+        const result = await response.json();
+
+        if (result.success) {
+          addDataSource({
+            id: result.data.id,
+            name: result.data.name,
+            rows: result.data.rows,
+            columns: result.data.columns,
+            data: result.data.preview,
+          });
+
+          // Auto-activate the last uploaded file
+          if (i === files.length - 1) {
+            setActiveDataSource(result.data.id);
+          }
+        }
       }
     } catch (error) {
       console.error('Upload error:', error);
@@ -62,6 +69,7 @@ export default function DataSourceManager() {
           ref={fileInputRef}
           type="file"
           accept=".xlsx,.xls,.csv"
+          multiple
           onChange={handleFileUpload}
           className="hidden"
         />
@@ -71,19 +79,22 @@ export default function DataSourceManager() {
           <RiUploadCloudLine className="text-4xl text-accent mx-auto mb-3" />
         )}
         <p className="text-sm text-white font-medium">
-          {uploading ? 'Uploading...' : 'Upload CSV or Excel'}
+          {uploading ? 'Uploading...' : 'Upload CSV or Excel (multiple files allowed)'}
         </p>
       </button>
 
       {/* Data Sources List */}
-      <div className="space-y-2">
+      <div className="space-y-2 max-h-[40vh] overflow-auto">
+        {dataSources.length === 0 && (
+          <p className="text-gray-500 text-sm">No data sources uploaded</p>
+        )}
         {dataSources.map((source) => (
           <div
             key={source.id}
             onClick={() => setActiveDataSource(source.id)}
-            className={`p-4 rounded-xl cursor-pointer transition-all ${
+            className={`p-4 rounded-xl cursor-pointer transition-all select-none ${
               activeDataSource?.id === source.id
-                ? 'bg-accent/10 border-2 border-accent'
+                ? 'bg-accent/20 border-2 border-accent'
                 : 'bg-[#1a1a1a] border-2 border-gray-800 hover:border-gray-700'
             }`}
           >
@@ -91,7 +102,9 @@ export default function DataSourceManager() {
               <RiFileExcelLine className="text-2xl text-accent flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="text-white font-medium truncate">{source.name}</p>
-                <p className="text-xs text-gray-500">{source.rows} rows • {source.columns.length} columns</p>
+                <p className="text-xs text-gray-500">
+                  {source.rows} rows • {source.columns.length} columns
+                </p>
               </div>
               {activeDataSource?.id === source.id && (
                 <RiCheckLine className="text-accent text-xl flex-shrink-0" />
